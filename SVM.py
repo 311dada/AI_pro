@@ -10,11 +10,17 @@ def PCA(x,k):
   X = X - np.mean(X,axis = 1,keepdims = True)
   m = X.shape[1]
   C = 1.0/m*np.dot(X,X.T)
-  e,e_vector = np.linalg.eig(C)
+  e,ev = np.linalg.eigh(C)
   n = ev.shape[0]
-  ev = ev[np.argsort(-e),:]
+  ev = ev[::-1]
   P = ev[np.arange(k),:]
   Y = np.dot(P,X)
+  f = open('PCA.txt','w')
+  for i in range(Y.shape[0]):
+     for j in range(Y.shape[1]):
+       f.write(str(Y[i][j])+' ')
+     f.write('\n')  
+  f.close() 
   print ('PCA has finished!')
   return Y
 
@@ -63,7 +69,7 @@ def init_dic_label():
     return y
 
 x = load_raw_data()
-X_raw = PCA(x,20000).T
+X_raw = PCA(x,5000).T
 init_dic_label()  
 y_raw = init_dic_label()   
 
